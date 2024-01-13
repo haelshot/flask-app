@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Violation Severity Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Traffic Violation Severity Prediction</h1>
+    <form action="{{ url_for('predict') }}" method="post">
+        <!-- Add input fields for each feature -->
+
+        <!-- Boolean values -->
+        <label for="Accident">Accident:</label>
+        <select id="Accident" name="Accident" required>
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+
+        <label for="Belts">Belts:</label>
+        <select id="Belts" name="Belts" required>
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+
+        <label for="Personal Injury">Personal Injury:</label>
+        <select id="Personal Injury" name="Personal Injury" required>
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+
+        <label for="Property Damage">Property Damage:</label>
+        <select id="Property Damage" name="Property Damage" required>
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+
+        <label for="Alcohol">Alcohol:</label>
+        <select id="Alcohol" name="Alcohol" required>
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+
+        <!-- Categorical features with unique values -->
+        {% for column, values in unique_values.items() %}
+        <label for="{{ column }}">{{ column }}</label>
+        <select id="{{ column }}" name="{{ column }}" required>
+            {% for value in values %}
+                <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+        </select>
+        {% endfor %}
+
+        <!-- Day, Month, Year, Hour -->
+        <label for="day">Day:</label>
+        <input type="number" id="day" name="day" min=0 max="31" required>
+
+        <label for="month">Month:</label>
+        <input type="number" id="month" name="month" min=0 max="12" required>
+
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" min="1900" max="2100" required>
+
+        <label for="hour">Hour:</label>
+        <input type="number" id="hour" name="hour" min=0 max="23" required>
+
+        <button type="submit">Predict Severity</button>
+    </form>
+    {% if prediction == '0'%}
+        <div class="result">
+            <p>The resulting traffic violation will most likely not be causing an accident</p>
+        </div>
+    {% elif prediction == '1'%}
+        <div class="result">
+            <p>Traffic Violation is likely to cause an accident</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
